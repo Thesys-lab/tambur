@@ -1,0 +1,92 @@
+# This file is part of MAXFLOW.
+
+# MAXFLOW is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# MAXFLOW is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with MAXFLOW.  If not, see <http://www.gnu.org/licenses/>.
+
+
+PROJECT("maxflow")
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5 FATAL_ERROR)
+
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 NEW)
+  cmake_policy(SET CMP0012 NEW)
+  IF(${CMAKE_VERSION} VERSION_GREATER 3.0.0) 
+    cmake_policy(SET CMP0042 NEW)
+  ENDIF()
+endif(COMMAND cmake_policy)
+
+
+SET(PACKAGE_NAME "maxflow")
+SET(MAJOR_VERSION 3)
+SET(MINOR_VERSION 0)
+SET(MICRO_VERSION 4)
+SET(INTERFACE_AGE 4)
+SET(BINARY_AGE    4)
+
+
+SET(PACKAGE_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}")
+SET(VERSION "${MAJOR_VERSION}.${MINOR_VERSION}")
+SET(PACKAGE_NAME "${PACKAGE_NAME}-${VERSION}")
+SET(prefix ${CMAKE_INSTALL_PREFIX})
+
+
+MATH(EXPR MAXFLOW_CURRENT "${MICRO_VERSION} - ${BINARY_AGE}")
+SET(MAXFLOW_REVISION ${INTERFACE_AGE})
+MATH(EXPR MAXFLOW_AGE "${BINARY_AGE} - ${INTERFACE_AGE}")
+
+SET(LIBRARY_SOVERSION_INFO "${MAXFLOW_CURRENT}")
+SET(LIBRARY_VERSION_INFO "${MAXFLOW_CURRENT}.${MAXFLOW_AGE}.${MAXFLOW_REVISION}")
+
+INCLUDE(GNUInstallDirs)
+
+SET(INCLUDE_INSTALL_PATH ${CMAKE_INSTALL_INCLUDEDIR}/maxflow-${VERSION})
+
+
+ADD_SUBDIRECTORY(maxflow)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+
+ADD_LIBRARY(maxflow SHARED maxflow.cpp)
+SET_TARGET_PROPERTIES(maxflow PROPERTIES 
+  SOVERSION ${LIBRARY_SOVERSION_INFO}
+  VERSION ${LIBRARY_VERSION_INFO}
+  )
+
+INSTALL(TARGETS maxflow
+  EXPORT MaxFlow
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")  
+
+
+
+SET(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_LIBDIR})
+
+
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/maxflow.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/maxflow.pc @ONLY)
+
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/maxflow.pc DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+SET(MAXFLOW_BASE_HEADER
+  maxflow.h
+  )
+
+INSTALL(FILES ${MAXFLOW_BASE_HEADER} DESTINATION ${INCLUDE_INSTALL_PATH})
+
+
+
+ADD_EXECUTABLE(test-maxflow test_maxflow.cpp)
+TARGET_LINK_LIBRARIES(test-maxflow maxflow)
+
+ENABLE_TESTING()
+ADD_TEST(maxflow test-maxflow)

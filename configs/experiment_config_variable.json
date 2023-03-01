@@ -1,0 +1,32 @@
+{
+    "interval_ms_feedback" : 2000.0,
+    "trace_folder" : "../traces",
+    "log_folder" : "../logs_variable",
+    "port" : 8080,
+    "sender_port" : 8081,
+    "one_way_delay" : 50,
+    "strategy" : "frame_match",
+    "ge_gMin_pkt" : 2,
+    "coding_schemes" : [ "StreamingCode" , "ReedSolomonMultiFrame"],
+    "w" : 32,
+    "size_factor" : 1,
+    "num_qrs_no_reduce" : 2,
+    "max_frame_size_possible" : 16383,
+    "ReedSolomonMultiFrame" : {
+        "max_data_pkts_per_group" : 64,
+        "max_fec_pkts_per_group" : 32,
+        "taus" : [0, 3]
+    },
+    "StreamingCode" : {
+        "taus" : [3],
+        "max_data_pkts_per_group" : 64,
+        "max_fec_pkts_per_group" : 32,
+        "models" : ["src/fec/models/Tambur-high-BW.pt", "src/fec/models/Tambur.pt" ],
+        "model_means" : ["src/fec/models/Tambur-high-BW_means.txt", "src/fec/models/Tambur_means.txt" ],
+        "model_vars" : ["src/fec/models/Tambur-high-BW_vars.txt", "src/fec/models/Tambur_vars.txt"]
+    },
+    "t_gb": 0.068,
+    "t_bg": 0.852,
+    "l_g": 0.04,
+    "l_b": 0.5
+}

@@ -1,0 +1,35 @@
+{
+    "interval_ms_feedback" : 2000.0,
+    "trace_folder" : "example_bootstrap",
+    "log_folder" : "example_bootstrap_logs",
+    "port" : 8080,
+    "sender_port" : 8081,
+    "one_way_delay" : 50,
+    "strategy" : "frame_match",
+    "ge_gMin_pkt" : 2,
+    "coding_schemes" : [ "StreamingCode" , "ReedSolomonMultiFrame"],
+    "w" : 32,
+    "size_factor" : 1,
+    "num_qrs_no_reduce" : 2,
+    "max_frame_size_possible" : 16383,
+    "ReedSolomonMultiFrame" : {
+        "max_data_pkts_per_group" : 64,
+        "max_fec_pkts_per_group" : 64,
+        "taus" : [0, 3],
+        "models" : [""],
+        "model_means" : [""],
+        "model_vars" : [""]
+    },
+    "StreamingCode" : {
+        "taus" : [3],
+        "max_data_pkts_per_group" : 64,
+        "max_fec_pkts_per_group" : 32,
+        "models" : ["high-BW",""],
+        "model_means" : ["",""],
+        "model_vars" : ["",""]
+    },
+    "t_gb": 0.068,
+    "t_bg": 0.852,
+    "l_g": 0.04,
+    "l_b": 0.5
+}

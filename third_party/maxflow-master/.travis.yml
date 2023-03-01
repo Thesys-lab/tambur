@@ -1,0 +1,18 @@
+arch:
+  - amd64
+  - ppc64le
+sudo: required 
+dist: trusty 
+
+before_script:
+  - mkdir build 
+  - cd build 
+  - cmake .. 
+
+script:
+  - make -j2 
+
+after_success:
+  - make test
+  
+

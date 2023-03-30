@@ -207,15 +207,22 @@ def main():
         if "high" in item:
             coding_schemes.append(item)
     # workaround to adjust the order of schemes to plot
+    del_point = False
+    for item in args.skip:
+        if "point" in item:
+            del_point = True
     reordered_coding_schemes = []
     for item in ['ReedSolomonMultiFrame_0',  'ReedSolomonMultiFrame_3', 'StreamingCode_3-point_9', 'StreamingCode_3', 'StreamingCode_3-high-BW']:
         if item in coding_schemes:
+            if not (item == 'StreamingCode_3-point_9' and del_point):
+                continue
             reordered_coding_schemes.append(item)
         elif item == 'StreamingCode_3-high-BW' and 'StreamingCode_3_high-BW' in coding_schemes:
             reordered_coding_schemes.append('StreamingCode_3_high-BW')
     coding_schemes = reordered_coding_schemes
-    plot_data(args, cdf_data_helper(cdf_data), coding_schemes, "")
-    plot_bar_data(args, cdf_data, coding_schemes, percentiles, "")
+    if args.no_video:
+        plot_data(args, cdf_data_helper(cdf_data), coding_schemes, "")
+        plot_bar_data(args, cdf_data, coding_schemes, percentiles, "")
 
     log_path_1 = args.output[0:-4] + "_1.json"
     log_exists_1 = os.path.exists(log_path_1)
@@ -249,14 +256,21 @@ def main():
             coding_schemes.append(item)
 
     # workaround to adjust the order of schemes to plot
+    del_point = False
+    for item in args.skip:
+        if "point" in item:
+            del_point = True
     reordered_coding_schemes = []
     for item in ['ReedSolomonMultiFrame_0',  'ReedSolomonMultiFrame_3', 'StreamingCode_3-point_9', 'StreamingCode_3', 'StreamingCode_3-high-BW']:
         if item in coding_schemes:
+            if item == 'StreamingCode_3-point_9' and del_point:
+                continue
             reordered_coding_schemes.append(item)
         elif item == 'StreamingCode_3-high-BW' and 'StreamingCode_3_high-BW' in coding_schemes:
             reordered_coding_schemes.append('StreamingCode_3_high-BW')
     coding_schemes = reordered_coding_schemes
     if not args.no_video:
+        plot_data(args, cdf_data_helper(cdf_data), coding_schemes, "_displayed")
         plot_bar_data(args, cdf_data, coding_schemes, percentiles,  "_displayed")
 
     log_path_2 = args.output[0:-4] + "_2.json"

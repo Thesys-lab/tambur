@@ -6,7 +6,8 @@ import argparse
 def main(output, traces_folder, config):
   commands = []
   for trace in os.listdir(traces_folder):
-    command = "~/open-tambur/src/fec_examples/get_ge_params " + config + " " + os.path.join(traces_folder, trace) + " " + output + " ; "
+    command_file = os.path.join(os.path.dirname(os.getcwd()), "tambur/src/fec_examples/get_ge_params ")
+    command = command_file + config + " " + os.path.join(traces_folder, trace) + " " + output + " ; "
     commands.append(command)
   for command in commands:
     try:

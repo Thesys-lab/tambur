@@ -23,7 +23,7 @@ public:
     struct RSMFParams
     {
         static inline uint16_t max_data_pkts_per_group{64};
-        static inline uint16_t max_fec_pkts_per_group{64};
+        static inline uint16_t max_fec_pkts_per_group{32};
     };
 
     struct SCParams
@@ -239,13 +239,17 @@ public:
         Config::max_data_stripes_per_frame = Config::max_frame_size_possible / Config::stripe_size + (modulo > 0);
 
         Config::max_fec_stripes_per_frame = (Config::max_data_stripes_per_frame + 1) / 2;
-        it = cfg_.find("ReedSolomonMultiFrame");
-        if (it != cfg_.end())
+        if (Config::coding_scheme.rfind("ReedSolomonMultiFrame", 0) == 0)
         {
-            if (Config::tau > 0) {
-                Config::max_fec_stripes_per_frame = Config::max_fec_stripes_per_frame * 2;
+            if (Config::tau > 0)
+            {
+                Config::max_fec_stripes_per_frame *= ((Config::tau + 1));
+                Config::max_fec_stripes_per_frame++;
+                Config::RSMFParams::max_fec_pkts_per_group *= ((Config::tau + 1));
+                Config::RSMFParams::max_fec_pkts_per_group++;
+                Config::is_multi_frame_block_code = true;
             }
-        }
+        }        
         assert(Config::max_fec_stripes_per_frame * Config::stripe_size >= Config::max_frame_size_possible / 2);
 
         assert(Config::max_data_stripes_per_frame * Config::stripe_size >= Config::max_frame_size_possible);

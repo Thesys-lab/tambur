@@ -136,7 +136,6 @@ def plot_bar_data(args, data, coding_schemes, percentiles, extra, ylabel):
     xticklabels = [f'{percent}th' for percent in percentiles]
     xticks = [7*i+2*width for i in range(len(percentiles))]
     xdata = 7 * np.arange(len(percentiles))
-
     for code in coding_schemes:
         ax.bar(xdata + start_pos,
             filtered_data[code],
@@ -243,7 +242,12 @@ def main():
     # workaround: adjust the order of schemes to plot
     coding_schemes = ['ReedSolomonMultiFrame_0', 'ReedSolomonMultiFrame_3',
                       'StreamingCode_3-point_9', 'StreamingCode_3', 'StreamingCode_3-high-BW']
-
+    del_point = False
+    for item in args.skip:
+        if "point" in item:
+            del_point = True
+    if del_point:
+        del coding_schemes[2]
     plot_data(args, all_freezes, coding_schemes, extra_sv_names[0], "Frequency of freezes (%)", False, False)
     plot_data(args, all_freeze_durations, coding_schemes, extra_sv_names[1], "Cumulative duration of freezes (%)", False, False)
     plot_bar_data(args, all_freezes, coding_schemes, percentiles, extra_sv_names[0], "Frequency of freezes (%)")

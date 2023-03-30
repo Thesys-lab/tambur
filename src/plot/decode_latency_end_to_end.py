@@ -278,7 +278,12 @@ def main():
     # workaround to adjust the order to schemes to plot
     coding_schemes = ['ReedSolomonMultiFrame_0', 'ReedSolomonMultiFrame_3',
                       'StreamingCode_3-point_9', 'StreamingCode_3', 'StreamingCode_3-high-BW']
-
+    del_point = False
+    for item in args.skip:
+        if "point" in item:
+            del_point = True
+    if del_point:
+        del coding_schemes[2]
     plot_data(args, decode_time, coding_schemes, "_displayed_all_latencies", False)
     plot_bar_data(args, decode_time, coding_schemes, percentiles, "_displayed_all_latencies")
 

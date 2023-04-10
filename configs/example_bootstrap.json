@@ -24,7 +24,7 @@
         "taus" : [3],
         "max_data_pkts_per_group" : 64,
         "max_fec_pkts_per_group" : 32,
-        "models" : ["high-BW",""],
+        "models" : ["","high-BW"],
         "model_means" : ["",""],
         "model_vars" : ["",""]
     },

@@ -156,8 +156,8 @@ def plot_bar_data(args, data, coding_schemes, percentiles, extra, ylabel):
     # used for generating freeze._bar_0_1.svg
     ax.legend(by_label.values(), by_label.keys(), loc='upper left',
               bbox_to_anchor=(0, 1.13))
-    ax.set_ylim(0, 5)
-    ax.set_yticks(list(range(6)))
+    if "median" not in ylabel:
+        ax.set_yticks(list(range(6)))
 
     ax.set_xlabel("Percentile over videos", fontsize=20)
     ax.set_ylabel(ylabel, fontsize=20)

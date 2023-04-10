@@ -5,8 +5,8 @@ import json
 import argparse
 
 def generateTraceVideo(traceFname, length, p_loss = 0.5, min_num_data_pkts = 1, \
-    max_num_data_pkts = 2, min_num_parity_pkts = 0, max_num_parity_pkts = 5, \
-    min_pkt_size = 500, max_pkt_size = 4000):
+    max_num_data_pkts = 8, min_num_parity_pkts = 0, max_num_parity_pkts = 5, \
+    min_pkt_size = 256, max_pkt_size = 2000):
   """
   Generates a dummy trace
   ARGUMENTS

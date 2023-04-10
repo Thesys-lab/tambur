@@ -12,15 +12,15 @@ def get_command(config, extra_arg,):
 
   return "src/scripts/run-config.sh --config=" + config + " " + extra_arg + " ; "
 
-def main(trace_folder, configs, num_core_pairs, extra_args):
+def main(trace_folder, configs, num_sender_receiver_pairs, extra_args):
   files = list(os.listdir(trace_folder))
   random.shuffle(files)
-  assert num_core_pairs > 0
-  if (num_core_pairs > len(files)):
-    num_core_pairs = len(files)
-  num_core_pairs = int(num_core_pairs // len(configs)) * int(len(configs))
-  cores_per_config = num_core_pairs // len(configs)
-  assert num_core_pairs > 0
+  assert num_sender_receiver_pairs > 0
+  if (num_sender_receiver_pairs > len(files)):
+    num_sender_receiver_pairs = len(files)
+  num_sender_receiver_pairs = int(num_sender_receiver_pairs // len(configs)) * int(len(configs))
+  cores_per_config = num_sender_receiver_pairs // len(configs)
+  assert num_sender_receiver_pairs > 0
   tmp ="tmp_folder"
   if (os.path.exists(tmp)):
     shutil.rmtree(tmp)
@@ -93,8 +93,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--trace_folder', required=True, help='log folder location')
     parser.add_argument('--config', required=True, help='Config file', action='append')
-    parser.add_argument('--num_core_pairs', required=False, default = 1, type=int, help='number of pairs of cores')
-    parser.add_argument('--hc_ge', required=True, action='append', type=int, help='Whether --hc-ge should be included for corresponding config')
+    parser.add_argument('--num_sender_receiver_pairs', required=False, default = 1, type=int, help='number of experiments to run in parallel')
+    parser.add_argument('--hc_ge', required=True, action='append', type=int, help='Whether --hc-ge should be included for corresponding config (i.e., to hard code the parameters of the GE loss model)')
     args = parser.parse_args()
     assert (len(args.config) == len(args.hc_ge))
     extra_args = ["" for _ in range(len(args.config))]
@@ -104,5 +104,5 @@ if __name__ == '__main__':
         extra_args[i] += "--hc-ge "
       extra_args[i] += "--no-mahi "
     num_configs = len(args.config)
-    num_core_pairs = int(args.num_core_pairs // num_configs) * int(num_configs)
-    main(args.trace_folder, args.config, args.num_core_pairs, extra_args)
+    num_sender_receiver_pairs = int(args.num_sender_receiver_pairs // num_configs) * int(num_configs)
+    main(args.trace_folder, args.config, args.num_sender_receiver_pairs, extra_args)

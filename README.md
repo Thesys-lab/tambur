@@ -36,8 +36,8 @@ You may need to run sudo sysctl -w net.ipv4.ip_forward=1 to run Mahimahi on your
 ```
 sudo sysctl -w net.ipv4.ip_forward=1 ;
 python src/scripts/generate_traces.py --outputFolder OUTPUT_FOLDER --num_traces NUM_TRACES --length NUM_FRAMES ;
-python src/scripts/bootstrap.py --num_core_pairs NUM_PAIRS_OF_CORES_AVAILABLE --trace_folder OUTPUT_FOLDER --config configs/example_bootstrap.json --hc_ge 1; 
-src/plot/generate_all_plots_FEC_only.sh --config=configs/example_bootstrap.json --plot-folder=../PLOT_FOLDER ; 
+python src/scripts/bootstrap.py --num_sender_receiver_pairs <NUM_EXPERIMENTS_TO_RUN_IN_PARALLEL> --trace_folder <OUTPUT_FOLDER> --config configs/example_bootstrap.json --hc_ge 1; 
+src/plot/generate_all_plots_FEC_only.sh --config=configs/example_bootstrap.json --plot-folder=<FOLDER_TO_SAVE_PLOTS_TO> ; 
 ```
 
 ## License

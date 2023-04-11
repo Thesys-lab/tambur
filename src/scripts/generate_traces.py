@@ -35,12 +35,12 @@ def generateTraceVideo(traceFname, length, p_loss = 0.5, min_num_data_pkts = 1, 
     num_data_pkts = random.randint(min_num_data_pkts, max_num_data_pkts)
     num_parity_pkts = random.randint(min_num_parity_pkts, max_num_parity_pkts)
     num_pkts = num_data_pkts + num_parity_pkts
-    d["trace"] += [random.uniform(0,1) < p_loss for _ in range(num_pkts)]
-    d["received_ttimes"] += [i for i in range(time, time + num_pkts)]
+    d["trace"] += [random.uniform(0,1) < p_loss for _ in range(num_pkts)] # 1 if and only if the packet is lost
+    d["received_ttimes"] += [i for i in range(time, time + num_pkts)] # Dummy values for transmit times
     time += 1
-    d["packet_parities"] += [0]*num_data_pkts + [1]*num_parity_pkts
-    d["packet_sizes"] += [random.randint(min_pkt_size, max_pkt_size)] * num_pkts
-    d["frame_numbers"] += [frame_num] * num_pkts
+    d["packet_parities"] += [0]*num_data_pkts + [1]*num_parity_pkts # 0's for data packets and 1's for parity packets
+    d["packet_sizes"] += [random.randint(min_pkt_size, max_pkt_size)] * num_pkts # sizes of packets in bytes
+    d["frame_numbers"] += [frame_num] * num_pkts # label packets of frame with corresponding frame number
     frame_num += 1
   with open(Path(traceFname +".json"), 'w') as f:
     json.dump(d, f)

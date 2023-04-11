@@ -1,1 +1,1 @@
-SUBDIRS = util examples fec_examples tests
+SUBDIRS = util examples fec_examples ringmaster_app tests

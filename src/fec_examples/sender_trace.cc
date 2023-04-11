@@ -60,7 +60,7 @@ int main(int argc, char * argv[])
   uint16_t prev_frame = 0;
   for (size_t i = 0; i < packet_parities.size(); ++i)
   {
-      if (packet_parities[i] == 0)
+      if (packet_parities[i] == 0) // Just using sizes of video frames from trace by adding the sizes of all data packets per frame
       {
           if (frame_numbers[i] == prev_frame) {
             frame_sizes.back() += packet_sizes[i];
@@ -252,7 +252,7 @@ int main(int argc, char * argv[])
   std::cerr << seed << " " << p_good_to_bad << " " << p_bad_to_good << " "
             << p_loss_good << " " << p_loss_bad << std::endl;
 
-  GEChannel gE(p_good_to_bad,p_bad_to_good,p_loss_good,p_loss_bad,seed);
+  GEChannel gE(p_good_to_bad,p_bad_to_good,p_loss_good,p_loss_bad,seed); // Use a channel to introduce packet losses
 
   while (frame_pos < num_frames) {
     if (fECSender.frame_ready()) {
@@ -272,7 +272,7 @@ int main(int argc, char * argv[])
             (frames.size() - 1));
         for (uint16_t i = 0; i < pkts.size(); i++) {
           if ((pkts.front().frame_num < num_frames_for_delay(Config::tau))
-              or gE.is_received()) {
+              or gE.is_received()) { // send the first padding frames reliably then send packets the gE channel does not drop
             sent_something = true;
             datagram_buf.emplace_back(pkts.at(i));
           }

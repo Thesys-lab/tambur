@@ -2,16 +2,36 @@
 
 Tambur is an open-source library for the FEC schemes in our paper published at NSDI '23 — [Tambur: Efficient loss recovery for videoconferencing via streaming
 codes](https://www.usenix.org/conference/nsdi23/presentation/rudow). The library is meant to enable rapid prototyping of new FEC schemes for videoconferencing. To ensure the confidentiality of the dataset the ML models used in our paper were trianed on, the models are not released as part of this library. Within the library, Tambur defaults to Tambur-full-BW until a new ML model is used for Tambur. 
+Tambur is integrated with a videoconferencing research platform called Ringmaster, available [here](https://github.com/microsoft/ringmaster), which was also open-sourced as part of the same paper. 
 
-### Building
 
+### Third-party libraries
+The following third-party libraries should be placed in "third_party"
 ```
-chmod +x tambur_install.sh
-bash tambur_install.sh
-./autogen.sh
-./configure
-make -j
+https://jerasure.org/jerasure/gf-complete (Revision 1.03.)
+http://jerasure.org/jerasure/jerasure (Revision 2.0)
+https://github.com/nlohmann/json (version 3.10.4)
+https://download.pytorch.org/libtorch/lts/1.8/cpu/libtorch-cxx11-abi-shared-with-deps-1.8.2%2Bcpu.zip 
+https://github.com/gerddie/maxflow (version 3.04)
+https://github.com/microsoft/ringmaster (Version 53c04ee)
 ```
+
+### Dependencies
+```
+sudo apt-get install build-essential autoconf automake libtool g++ pkg-config googletest protobuf-compiler libprotobuf-dev autotools-dev dh-autoreconf iptables pkg-config dnsmasq-base  apache2-bin debhelper libssl-dev ssl-cert libxcb-present-dev libcairo2-dev libpango1.0-dev apache2-dev libgtest-dev -y ; 
+sudo apt-get install libgtest-dev libz-dev jq libjerasure2; 
+sudo apt install python3-pip ; 
+pip3 install torch torchvision torchaudio pandas matplotlib ;
+sudo add-apt-repository ppa:keithw/mahimahi ; 
+sudo apt-get update ; sudo apt-get install mahimahi ; 
+sudo apt install autoconf libvpx-dev libsdl2-dev ;
+```
+
+### Install script
+```
+./tambur_install.sh ;
+```
+
 
 ### Example 1: UDP echo server and client
 
@@ -38,6 +58,13 @@ sudo sysctl -w net.ipv4.ip_forward=1 ;
 python src/scripts/generate_traces.py --outputFolder OUTPUT_FOLDER --num_traces NUM_TRACES --length NUM_FRAMES ;
 python src/scripts/bootstrap.py --num_sender_receiver_pairs <NUM_EXPERIMENTS_TO_RUN_IN_PARALLEL> --trace_folder <OUTPUT_FOLDER> --config configs/example_bootstrap.json --hc_ge 1; 
 src/plot/generate_all_plots_FEC_only.sh --config=configs/example_bootstrap.json --plot-folder=<FOLDER_TO_SAVE_PLOTS_TO> ; 
+```
+
+# Tambur plus ringmaster example use
+```
+sudo sysctl -w net.ipv4.ip_forward=1 ;
+python3 src/ringmaster_scripts/bootstrap.py --num_sender_receiver_pairs <NUM_EXPERIMENTS_TO_RUN_IN_PARALLEL> --videos_folder <FOLDER_CONTAINING_VIDEOS> --config ringmaster_configs/experiment_random_variable.json --offset <OFFSET_FOR_PORT>;
+src/plot/generate_all_plots.sh --config=ringmaster_configs/experiment_random_variable.json --plot-folder=<FOLDER_TO_SAVE_PLOTS_TO>
 ```
 
 ## License

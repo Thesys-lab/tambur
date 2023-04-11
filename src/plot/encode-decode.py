@@ -109,10 +109,10 @@ def main():
     parser.add_argument("--skip", required=False, action='append', default=[])
 
     args = parser.parse_args()
-    args.config = os.path.basename(args.config)
 
     with open(args.config, 'r') as f:
       d = json.load(f)
+    args.config = os.path.basename(args.config)
     assert(len(d["StreamingCode"]["taus"]) == 1 or d["StreamingCode"]["taus"] == [d["StreamingCode"]["taus"][0]]*len(d["StreamingCode"]["taus"]))
     tau = int(d["StreamingCode"]["taus"][0])
 

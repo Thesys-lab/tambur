@@ -18,6 +18,8 @@ AC_PROG_RANLIB
 
 # Checks for libraries.
 PKG_CHECK_MODULES([gtest],[gtest])
+PKG_CHECK_MODULES([VPX],[vpx])
+PKG_CHECK_MODULES([SDL],[sdl2])
 
 # Checks for header files.
 
@@ -32,6 +34,7 @@ AC_CONFIG_FILES([
     src/util/Makefile
     src/examples/Makefile
     src/fec_examples/Makefile
+    src/ringmaster_app/Makefile
     src/tests/Makefile
 ])
 
